@@ -10,3 +10,9 @@ How to change the gokart vehicle?
      Head to the config.lua and you will see a vehicleModel setting, put the spawncode inside of the backticks.
      
 If you have any more questions, feel free to add me on discord: sati#2696
+
+
+
+UPDATE :
+
+UPDATED server.lua to reset the race if someone while racing crash/connection drop and there's no more player in the race so it make the queue available again for new players.
