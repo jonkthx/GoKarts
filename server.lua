@@ -194,3 +194,57 @@ function tablelength(T)
     return count
   end
 
+
+
+AddEventHandler('playerDropped', function(reason)
+    local source = source
+    for k, v in pairs(playerQueue) do
+        if v.tempid == source then
+            table.remove(playerQueue, k)
+            break
+        end
+    end
+
+    -- Remove the player from existingKarts
+    for k, v in pairs(existingKarts) do
+        if v.tempid == source then
+            -- Optionally delete the kart entity if needed
+            if DoesEntityExist(NetworkGetEntityFromNetworkId(v.kartId)) then
+                DeleteEntity(NetworkGetEntityFromNetworkId(v.kartId))
+            end
+
+            existingKarts[k] = nil
+            break
+        end
+    end
+end)
+
+
+function monitorRaceAndQueue()
+    while true do
+        Citizen.Wait(1000) 
+        if tablelength(playerQueue) == 0 and tablelength(existingKarts) == 0 then
+            if gameOnGoing then
+                resetGame()
+                print("Race reset due to no players in queue and no active karts.")
+            end
+        end
+    end
+end
+
+Citizen.CreateThread(monitorRaceAndQueue)
+
+
+function resetGame()
+    -- Resetting all the relevant variables to their initial state
+    playerQueue = {}
+    existingKarts = {}
+    winnersTable = {}
+    gameOnGoing = false
+    countdownOnGoing = false
+    timer = cfg.gameSettings.queueTimer
+    players = 1
+    index = 1
+
+    print("Game has been reset.")
+end
